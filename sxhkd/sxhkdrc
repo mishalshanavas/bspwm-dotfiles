@@ -1,0 +1,318 @@
+# ═══════════════════════════════════════════════════════════════════
+# ⌨️  SXHKD CONFIGURATION - Modern r/unixporn Setup
+# ═══════════════════════════════════════════════════════════════════
+
+## ── APPLICATION LAUNCHERS ─────────────────────────────────────────────
+
+# Terminal emulator
+super + Return
+	kitty
+
+# Alternative terminal 
+alt + Return
+	kitty
+
+# File manager
+super + e
+	nautilus
+
+# Browser
+super + b
+	brave
+
+# Modern application launcher
+super + space
+	~/.config/rofi/launchers/themes/launcher.sh
+
+# Alternative launcher (run mode) 
+alt + space
+	rofi -show run -theme ~/.config/rofi/themes/modern.rasi
+
+# Power menu
+super + shift + Escape
+	~/.config/rofi/powermenu/bin/powermenu.sh
+
+# Quick emoji picker (if rofi-emoji is installed)
+super + period
+	rofi -show emoji -theme ~/.config/rofi/themes/modern.rasi
+
+# Calculator
+super + c
+	rofi -show calc -theme ~/.config/rofi/themes/modern.rasi
+
+## ── SCREENSHOTS ────────────────────────────────────────────────────────
+
+# Screenshot selection
+shift + Print
+	~/.local/bin/screenshot select 
+
+# Full screenshot
+Print
+	~/.local/bin/screenshot
+
+# Window screenshot
+alt + Print
+	~/.local/bin/screenshot window
+
+# Screenshot to clipboard
+ctrl + shift + Print
+	~/.local/bin/screenshot clipboard
+
+## ── WINDOW MANAGEMENT ──────────────────────────────────────────────────
+
+# Close window (graceful)
+super + q
+	bspc node -c
+
+# Kill window (force)
+super + shift + q
+	bspc node -k
+
+# Toggle window states
+super + f
+	bspc node -t ~fullscreen
+
+super + shift + f
+	bspc node -t ~floating
+
+super + t
+	bspc node -t ~tiled
+
+super + shift + t
+	bspc node -t ~pseudo_tiled
+
+# Toggle sticky window
+super + s
+	bspc node -g sticky
+
+# Toggle private window (no history)
+super + shift + s
+	bspc node -g private
+
+## ── BSPWM CONTROLS ──────────────────────────────────────────────────────
+
+# Restart bspwm and sxhkd
+super + shift + r
+	bspc wm -r && pkill -USR1 -x sxhkd && notify-send "BSPWM" "Configuration reloaded"
+
+# Reload sxhkd only
+super + Escape
+	pkill -USR1 -x sxhkd && notify-send "SXHKD" "Keybindings reloaded"
+
+# Quit bspwm
+super + shift + ctrl + q
+	bspc quit
+
+# Toggle between tiled and monocle layout
+super + m
+	bspc desktop -l next
+
+# Swap with biggest window
+super + g
+	bspc node -s biggest.window.local
+
+# Balance tree
+super + shift + b
+	bspc node @/ -B
+
+# Equalize tree 
+super + shift + equal
+	bspc node @/ -E
+
+## ── FOCUS AND MOVEMENT ─────────────────────────────────────────────────
+
+# Focus window in direction (arrow keys)
+super + {Left,Down,Up,Right}
+	bspc node -f {west,south,north,east}
+
+# Focus window in direction (vim keys)
+super + {h,j,k,l}
+	bspc node -f {west,south,north,east}
+
+# Move window in direction (arrow keys)
+super + shift + {Left,Down,Up,Right}
+	bspc node -s {west,south,north,east}
+
+# Move window in direction (vim keys)
+super + shift + {h,j,k,l}
+	bspc node -s {west,south,north,east}
+
+# Focus next/previous window
+alt + {Tab,shift + Tab}
+	bspc node -f {next,prev}.local.!hidden.window
+
+# Focus parent/brother/first/second node
+super + {p,comma,period,slash}
+	bspc node -f @{parent,brother,first,second}
+
+## ── WORKSPACE MANAGEMENT ───────────────────────────────────────────────
+
+# Focus workspace
+super + {1,2,3,4,5,6,7,8,9,0}
+	bspc desktop -f '^{1,2,3,4,5,6,7,8,9,10}'
+
+# Move window to workspace and follow
+super + shift + {1,2,3,4,5,6,7,8,9,0}
+	bspc node -d '^{1,2,3,4,5,6,7,8,9,10}' --follow
+
+# Move window to workspace (without following)
+super + ctrl + {1,2,3,4,5,6,7,8,9,0}
+	bspc node -d '^{1,2,3,4,5,6,7,8,9,10}'
+
+# Cycle through workspaces
+super + {Page_Up,Page_Down}
+	bspc desktop -f {prev,next}.local
+
+# Cycle through occupied workspaces only
+super + Tab
+	bspc desktop -f next.occupied.local
+
+# Cycle through all workspaces
+super + shift + Tab
+	bspc desktop -f next.local
+
+# Focus last desktop
+super + grave
+	bspc desktop -f last
+
+# Focus older/newer desktop in history
+super + {o,i}
+	bspc wm -h off; \
+	bspc desktop {older,newer} -f; \
+	bspc wm -h on
+
+## ── RESIZING ───────────────────────────────────────────────────────────
+
+# Expand windows (arrow keys)
+super + alt + {Left,Down,Up,Right}
+	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+# Expand windows (vim keys)
+super + alt + {h,j,k,l}
+	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+# Contract windows (arrow keys)
+super + alt + shift + {Left,Down,Up,Right}
+	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+# Contract windows (vim keys)
+super + alt + shift + {h,j,k,l}
+	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+# Move floating window
+super + ctrl + {Left,Down,Up,Right}
+	bspc node -v {-20 0,0 20,0 -20,20 0}
+
+# Move floating window (vim keys)
+super + ctrl + {h,j,k,l}
+	bspc node -v {-20 0,0 20,0 -20,20 0}
+
+## ── GAPS AND APPEARANCE ────────────────────────────────────────────────
+
+# Increase/decrease window gaps
+super + {plus,minus}
+	bspc config -d focused window_gap $(($(bspc config -d focused window_gap) {+,-} 5))
+
+# Reset window gaps
+super + equal
+	bspc config -d focused window_gap 12
+
+# Toggle gaps
+super + shift + g
+	bspc config window_gap {0,12}
+
+## ── MEDIA CONTROLS ─────────────────────────────────────────────────────
+
+# Volume control
+XF86AudioRaiseVolume
+	pactl set-sink-volume @DEFAULT_SINK@ +2% && ~/.config/eww/scripts/volume
+
+XF86AudioLowerVolume
+	pactl set-sink-volume @DEFAULT_SINK@ -2% && ~/.config/eww/scripts/volume
+
+XF86AudioMute
+	pactl set-sink-mute @DEFAULT_SINK@ toggle && ~/.config/eww/scripts/volume
+
+# Fine volume control with shift
+shift + XF86AudioRaiseVolume
+	pactl set-sink-volume @DEFAULT_SINK@ +1%
+
+shift + XF86AudioLowerVolume  
+	pactl set-sink-volume @DEFAULT_SINK@ -1%
+
+# Media playback
+XF86AudioPlay
+	playerctl play-pause
+
+XF86AudioNext
+	playerctl next
+
+XF86AudioPrev
+	playerctl previous
+
+XF86AudioStop
+	playerctl stop
+
+# Brightness control
+XF86MonBrightnessUp
+	brightnessctl s 5%+
+
+XF86MonBrightnessDown
+	brightnessctl s 5%-
+
+# Fine brightness control with shift
+shift + XF86MonBrightnessUp
+	brightnessctl s 1%+
+
+shift + XF86MonBrightnessDown
+	brightnessctl s 1%-
+
+## ── SYSTEM SHORTCUTS ───────────────────────────────────────────────────
+
+# Lock screen
+super + l
+	if command -v i3lock >/dev/null; then i3lock -c 0d1117; fi
+
+# Toggle compositor
+super + shift + c
+	if pgrep -x picom > /dev/null; then pkill picom; else picom -b; fi
+
+# Restart EWW bar
+super + shift + w
+	~/.config/eww/restart.sh
+
+# System monitor
+super + shift + m
+	kitty -e htop
+
+# File manager as root
+super + shift + e
+	kitty -e sudo nautilus
+
+## ── PRESELECTION ───────────────────────────────────────────────────────
+
+# Preselect direction
+super + ctrl + alt + {Left,Down,Up,Right}
+	bspc node -p {west,south,north,east}
+
+# Preselect direction (vim keys)  
+super + ctrl + alt + {h,j,k,l}
+	bspc node -p {west,south,north,east}
+
+# Preselect ratio
+super + ctrl + {1-9}
+	bspc node -o 0.{1-9}
+
+# Cancel preselection for focused node
+super + ctrl + alt + space
+	bspc node -p cancel
+
+# Cancel preselection for focused desktop
+super + ctrl + shift + space
+	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
+## ── SPECIAL FUNCTIONS ──────────────────────────────────────────────────
+
+# Emergency logout (if WM becomes unresponsive)
+ctrl + alt + Delete
+	pkill -KILL -u $USER

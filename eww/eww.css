@@ -1,0 +1,87 @@
+/* Color variables (minimal monochrome) */
+* {
+  all: unset;
+}
+
+window {
+  background: #0e1419;
+}
+
+.bar {
+  font-family: "Noto Sans", sans-serif;
+  font-size: 13px;
+  margin: 0 10px;
+  color: #ffffff;
+}
+
+/* Icon module styling */
+.icon-module {
+  margin: 0 2px;
+}
+
+.icon-module__icon {
+  margin-right: 5px;
+  font-family: "Font Awesome 5 Free Solid", "Symbols Nerd Font", monospace;
+  color: #ffffff;
+}
+
+/* Workspaces styling */
+.workspaces {
+  font-family: "Font Awesome 5 Free Solid", "Symbols Nerd Font", monospace;
+  font-size: 8px;
+  margin-right: 20px;
+}
+
+.workspaces button {
+  margin: 0px 2px;
+  color: #465059;
+  border: none;
+  background: none;
+  padding: 2px;
+}
+
+.workspaces .occupied {
+  color: #aaaaaa;
+}
+
+.workspaces .focused {
+  color: #ffffff;
+  font-size: 10px;
+}
+
+.workspaces .urgent {
+  color: #ffffff;
+}
+
+.workspaces .empty {
+  color: #465059;
+  font-size: 6px;
+}
+
+/* All modules in monochrome white */
+.network {
+  color: #ffffff;
+  font-family: "Font Awesome 5 Free Solid", "Symbols Nerd Font", monospace;
+  font-size: 13px;
+  margin: 0 5px;
+}
+
+.speaker,
+.battery,
+.time {
+  color: #ffffff;
+}
+
+/* Power button styling */
+.power {
+  color: #ffffff;
+  background: none;
+  border: none;
+  font-family: "Font Awesome 5 Free Solid", "Symbols Nerd Font", monospace;
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.power:hover {
+  color: #cccccc;
+}
