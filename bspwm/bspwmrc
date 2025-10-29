@@ -31,6 +31,9 @@ xinput --set-prop "$(xinput list --name-only | grep -i touchpad)" "libinput Tapp
 command -v mpris-proxy >/dev/null 2>&1 && mpris-proxy &
 command -v dunst >/dev/null 2>&1 && dunst &
 
+# Start libinput-gestures for touchpad gestures
+command -v libinput-gestures >/dev/null 2>&1 && libinput-gestures &
+
 # Start EWW bar (non-blocking, with error handling)
 if [ -f ~/.config/eww/start.sh ]; then
   (bash ~/.config/eww/start.sh &) || true
@@ -68,6 +71,11 @@ bspc config honor_size_hints       false
 bspc config ignore_ewmh_focus      false
 bspc config remove_disabled_monitors true
 bspc config remove_unplugged_monitors true
+
+# Workspace switching optimization
+bspc config automatic_scheme       alternate
+bspc config initial_polarity       second_child
+bspc config directional_focus_tightness low
 
 
 # Modern color scheme (minimal monochrome)

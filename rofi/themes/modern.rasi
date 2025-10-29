@@ -1,0 +1,77 @@
+/*
+ * ⚫ Minimal Monochrome Rofi Theme - Pitch Black Design
+ * Ultra-minimal flat design with maximum contrast
+ */
+
+* {
+    background:     #000000;
+    foreground:     #ffffff;
+    background-alt: #111111;
+    selected:       #333333;
+    urgent:         #666666;
+    
+    margin:         0;
+    padding:        0;
+    spacing:        0;
+    
+    background-color: transparent;
+    text-color:      @foreground;
+    font:            "JetBrains Mono 11";
+}
+
+window {
+    location:        center;
+    width:           500;
+    background-color: @background;
+    border:          1px;
+    border-color:    #333333;
+}
+
+mainbox {
+    padding:         16px;
+    spacing:         12px;
+}
+
+inputbar {
+    children:        [ prompt, entry ];
+    spacing:         8px;
+    padding:         8px 12px;
+    background-color: @background-alt;
+    border:          1px;
+    border-color:    #333333;
+}
+
+prompt {
+    text-color:      #888888;
+    font:            "JetBrains Mono Bold 11";
+}
+
+entry {
+    placeholder:     "type to search...";
+    placeholder-color: #444444;
+}
+
+listview {
+    lines:           6;
+    spacing:         2px;
+    fixed-height:    true;
+}
+
+element {
+    padding:         6px 8px;
+    background-color: transparent;
+}
+
+element selected {
+    background-color: @selected;
+    text-color:      @foreground;
+}
+
+element-icon {
+    size:            16px;
+    margin:          0 8px 0 0;
+}
+
+element-text {
+    vertical-align:  0.5;
+}
