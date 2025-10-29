@@ -6,11 +6,11 @@ alt + Return
 	kitty
 
 # File manager
-super + e
+alt + e
 	nautilus
 
 # Browser
-super + b
+alt + b
 	brave
 
 # Launcher
@@ -23,14 +23,6 @@ alt + space
 # Power menu
 super + shift + Escape
 	~/.config/rofi/powermenu/bin/powermenu.sh
-
-# Quick emoji picker (if rofi-emoji is installed)
-super + period
-	rofi -show emoji -theme ~/.config/rofi/themes/modern.rasi
-
-# Calculator
-super + c
-	rofi -show calc -theme ~/.config/rofi/themes/modern.rasi
 
 
 # Screenshot selection
@@ -51,11 +43,11 @@ ctrl + shift + Print
 
 
 # Close window (graceful)
-super + q
+alt + q
 	bspc node -c
 
 # Kill window (force)
-super + shift + q
+alt + shift + q
 	bspc node -k
 
 # Toggle window states

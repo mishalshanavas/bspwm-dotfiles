@@ -15,7 +15,7 @@
        :orientation "h"
        :space-evenly false
        :visible {visible ?: true}
-    (label :class "icon-module__icon" :text "${icon}"))
+    (label :class "icon-module__icon" :text "${icon}")
     (children)))
 
 ;; Essential widgets only
