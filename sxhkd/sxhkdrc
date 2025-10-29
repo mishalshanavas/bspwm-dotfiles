@@ -1,14 +1,7 @@
-# ═══════════════════════════════════════════════════════════════════
-# ⌨️  SXHKD CONFIGURATION - Modern r/unixporn Setup
-# ═══════════════════════════════════════════════════════════════════
-
-## ── APPLICATION LAUNCHERS ─────────────────────────────────────────────
-
-# Terminal emulator
+# Terminal
 super + Return
 	kitty
 
-# Alternative terminal 
 alt + Return
 	kitty
 
@@ -20,11 +13,10 @@ super + e
 super + b
 	brave
 
-# Modern application launcher
+# Launcher
 super + space
 	~/.config/rofi/launchers/themes/launcher.sh
 
-# Alternative launcher (run mode) 
 alt + space
 	rofi -show run -theme ~/.config/rofi/themes/modern.rasi
 
@@ -40,7 +32,6 @@ super + period
 super + c
 	rofi -show calc -theme ~/.config/rofi/themes/modern.rasi
 
-## ── SCREENSHOTS ────────────────────────────────────────────────────────
 
 # Screenshot selection
 shift + Print
@@ -58,7 +49,6 @@ alt + Print
 ctrl + shift + Print
 	~/.local/bin/screenshot clipboard
 
-## ── WINDOW MANAGEMENT ──────────────────────────────────────────────────
 
 # Close window (graceful)
 super + q
@@ -89,7 +79,6 @@ super + s
 super + shift + s
 	bspc node -g private
 
-## ── BSPWM CONTROLS ──────────────────────────────────────────────────────
 
 # Restart bspwm and sxhkd
 super + shift + r
@@ -119,7 +108,6 @@ super + shift + b
 super + shift + equal
 	bspc node @/ -E
 
-## ── FOCUS AND MOVEMENT ─────────────────────────────────────────────────
 
 # Focus window in direction (arrow keys)
 super + {Left,Down,Up,Right}
@@ -145,7 +133,6 @@ alt + {Tab,shift + Tab}
 super + {p,comma,period,slash}
 	bspc node -f @{parent,brother,first,second}
 
-## ── WORKSPACE MANAGEMENT ───────────────────────────────────────────────
 
 # Focus workspace
 super + {1,2,3,4,5,6,7,8,9,0}
@@ -181,23 +168,14 @@ super + {o,i}
 	bspc desktop {older,newer} -f; \
 	bspc wm -h on
 
-## ── RESIZING ───────────────────────────────────────────────────────────
 
-# Expand windows (arrow keys)
+# Dynamic window resizing (arrow keys) - automatically detects edges
 super + alt + {Left,Down,Up,Right}
-	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+	~/.config/bspwm/scripts/resize.sh {left,down,up,right}
 
-# Expand windows (vim keys)
+# Dynamic window resizing (vim keys) - automatically detects edges  
 super + alt + {h,j,k,l}
-	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
-
-# Contract windows (arrow keys)
-super + alt + shift + {Left,Down,Up,Right}
-	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
-
-# Contract windows (vim keys)
-super + alt + shift + {h,j,k,l}
-	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+	~/.config/bspwm/scripts/resize.sh {left,down,up,right}
 
 # Move floating window
 super + ctrl + {Left,Down,Up,Right}
@@ -207,7 +185,6 @@ super + ctrl + {Left,Down,Up,Right}
 super + ctrl + {h,j,k,l}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
-## ── GAPS AND APPEARANCE ────────────────────────────────────────────────
 
 # Increase/decrease window gaps
 super + {plus,minus}
@@ -221,7 +198,6 @@ super + equal
 super + shift + g
 	bspc config window_gap {0,12}
 
-## ── MEDIA CONTROLS ─────────────────────────────────────────────────────
 
 # Volume control
 XF86AudioRaiseVolume
@@ -267,7 +243,6 @@ shift + XF86MonBrightnessUp
 shift + XF86MonBrightnessDown
 	brightnessctl s 1%-
 
-## ── SYSTEM SHORTCUTS ───────────────────────────────────────────────────
 
 # Lock screen
 super + l
@@ -289,7 +264,6 @@ super + shift + m
 super + shift + e
 	kitty -e sudo nautilus
 
-## ── PRESELECTION ───────────────────────────────────────────────────────
 
 # Preselect direction
 super + ctrl + alt + {Left,Down,Up,Right}
@@ -311,7 +285,6 @@ super + ctrl + alt + space
 super + ctrl + shift + space
 	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
 
-## ── SPECIAL FUNCTIONS ──────────────────────────────────────────────────
 
 # Emergency logout (if WM becomes unresponsive)
 ctrl + alt + Delete
