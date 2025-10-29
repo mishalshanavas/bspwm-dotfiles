@@ -52,16 +52,16 @@ alt + shift + q
 
 # Toggle window states
 super + f
-	bspc node -t ~fullscreen
+	bspc node -t '~fullscreen'
 
 super + shift + f
-	bspc node -t ~floating
+	bspc node -t '~floating'
 
 super + t
-	bspc node -t ~tiled
+	bspc node -t '~tiled'
 
 super + shift + t
-	bspc node -t ~pseudo_tiled
+	bspc node -t '~pseudo_tiled'
 
 # Toggle sticky window
 super + s
@@ -70,6 +70,23 @@ super + s
 # Toggle private window (no history)
 super + shift + s
 	bspc node -g private
+
+# Bulk window state management
+# Make all windows in current workspace floating
+super + ctrl + shift + f
+	~/.config/bspwm/scripts/bulk_window_state.sh floating
+
+# Make all windows in current workspace tiled
+super + ctrl + shift + t
+	~/.config/bspwm/scripts/bulk_window_state.sh tiled
+
+# Make all windows in specific workspace floating (1-9)
+super + ctrl + alt + {1,2,3,4,5,6,7,8,9}
+	~/.config/bspwm/scripts/bulk_window_state.sh floating {1,2,3,4,5,6,7,8,9}
+
+# Make all windows in specific workspace tiled (1-9)
+super + alt + shift + {1,2,3,4,5,6,7,8,9}
+	~/.config/bspwm/scripts/bulk_window_state.sh tiled {1,2,3,4,5,6,7,8,9}
 
 
 # Restart bspwm and sxhkd
@@ -176,6 +193,23 @@ super + ctrl + {Left,Down,Up,Right}
 # Move floating window (vim keys)
 super + ctrl + {h,j,k,l}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
+
+# Alternative mouse support using keyboard shortcuts
+# Super+M then drag with mouse to move
+super + m ; button1
+	bspc node -v
+
+# Super+R then drag with mouse to resize  
+super + r ; button1
+	bspc node -z
+
+# Quick mouse-like movement with number pad
+super + shift + {1,2,3,4,6,7,8,9}
+	bspc node -v {-40 40,0 40,40 40,-40 0,40 0,-40 -40,0 -40,40 -40}
+
+# Quick resize with Ctrl+number pad
+super + ctrl + {1,2,3,4,6,7,8,9}
+	~/.config/bspwm/scripts/resize.sh {left,down,right,up,right,up,up,left}
 
 
 # Increase/decrease window gaps

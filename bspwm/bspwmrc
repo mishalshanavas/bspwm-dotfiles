@@ -52,7 +52,7 @@ bspc config single_monocle       true
 bspc config focus_follows_pointer   true
 bspc config pointer_follows_focus   false  
 bspc config pointer_follows_monitor true
-bspc config click_to_focus         none
+bspc config click_to_focus         button1
 bspc config swallow_first_click    false
 bspc config honor_size_hints       false
 bspc config ignore_ewmh_focus      false
@@ -61,6 +61,12 @@ bspc config remove_unplugged_monitors true
 bspc config automatic_scheme       alternate
 bspc config initial_polarity       second_child
 bspc config directional_focus_tightness low
+
+# Mouse pointer settings for drag operations
+bspc config pointer_modifier super
+bspc config pointer_action1 move
+bspc config pointer_action2 resize_side  
+bspc config pointer_action3 resize_corner
 
 # Colors
 bspc config normal_border_color    "#333333"
