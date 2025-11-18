@@ -100,19 +100,19 @@ super + ctrl + e
 	bspc node @/ -E
 
 
-# Focus window in direction (arrow keys)
+# Focus window in given direction (arrow keys)
 super + {Left,Down,Up,Right}
 	bspc node -f {west,south,north,east}
 
-# Focus window in direction (vim keys)
+# Focus window in given direction (vim keys)
 super + {h,j,k,l}
 	bspc node -f {west,south,north,east}
 
-# Move window in direction (arrow keys)
+# Move window in given direction (arrow keys)
 super + shift + {Left,Down,Up,Right}
 	bspc node -s {west,south,north,east}
 
-# Move window in direction (vim keys)
+# Move window in given direction (vim keys)
 super + shift + {h,j,k,l}
 	bspc node -s {west,south,north,east}
 
@@ -160,11 +160,11 @@ super + {o,i}
 	bspc wm -h on
 
 
-# Dynamic window resizing (arrow keys) - automatically detects edges
+# Dynamic window resizing - automatically detects edges (arrow keys)
 super + alt + {Left,Down,Up,Right}
 	~/.config/bspwm/scripts/resize.sh {left,down,up,right}
 
-# Dynamic window resizing (vim keys) - automatically detects edges  
+# Dynamic window resizing - automatically detects edges (vim keys)
 super + alt + {h,j,k,l}
 	~/.config/bspwm/scripts/resize.sh {left,down,up,right}
 
@@ -176,12 +176,12 @@ super + ctrl + {Left,Down,Up,Right}
 super + ctrl + {h,j,k,l}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
-# Alternative mouse support using keyboard shortcuts
-# Super+Shift+D then drag with mouse to move
+# Mouse drag operations
+# Super+Shift+D then drag with mouse to move window
 super + shift + d ; button1
 	bspc node -v
 
-# Super+R then drag with mouse to resize  
+# Super+R then drag with mouse to resize window
 super + r ; button1
 	bspc node -z
 
@@ -265,11 +265,11 @@ super + shift + e
 	kitty -e sudo nautilus
 
 
-# Preselect direction
+# Preselect split direction (arrow keys)
 super + ctrl + alt + {Left,Down,Up,Right}
 	bspc node -p {west,south,north,east}
 
-# Preselect direction (vim keys)  
+# Preselect split direction (vim keys)
 super + ctrl + alt + {h,j,k,l}
 	bspc node -p {west,south,north,east}
 
