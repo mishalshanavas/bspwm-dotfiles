@@ -1,35 +1,127 @@
 #!/bin/bash
 
-# Source colors
+# Enhanced BSPWM configuration with improved error handling
+# Source: github.com/mishalshanavas/bspwm-dotfiles
+
+# Logging function
+log() {
+    echo "[BSPWM] $1" | systemd-cat -t bspwm 2>/dev/null || echo "[BSPWM] $1" >&2
+}
+
+# Service start function with error handling
+start_service() {
+    local service="$1"
+    local args="$2"
+    local description="$3"
+    
+    if command -v "$service" >/dev/null 2>&1; then
+        if pgrep -x "$service" >/dev/null; then
+            log "$description already running"
+        else
+            log "Starting $description..."
+            if [ -n "$args" ]; then
+                $service $args &
+            else
+                $service &
+            fi
+            sleep 0.2  # Brief pause for service to initialize
+        fi
+    else
+        log "Warning: $service not found, skipping $description"
+    fi
+}
+
+# Source colors (optional)
 [ -f ~/.config/colors.conf ] && source ~/.config/colors.conf
 
-# Start services
-command -v pulseaudio >/dev/null 2>&1 && pulseaudio --start &
-command -v picom >/dev/null 2>&1 && picom --config ~/.config/picom/picom.conf &
-command -v sxhkd >/dev/null 2>&1 && sxhkd -c ~/.config/sxhkd/sxhkdrc &
+log "Starting BSPWM configuration..."
 
-# Set wallpaper
-if [ -f "$HOME/Pictures/WallPapers/fail.png" ] && command -v nitrogen >/dev/null 2>&1; then
-  nitrogen --set-scaled "$HOME/Pictures/WallPapers/fail.png" &
-else
-  xsetroot -solid "#000000" &
+# Core services startup with dependency management
+log "Starting core services..."
+
+# Audio system (highest priority)
+start_service "pulseaudio" "--start" "PulseAudio daemon"
+
+# Window compositor (depends on X11)
+start_service "picom" "--config ~/.config/picom/picom.conf" "Picom compositor"
+
+# Hotkey daemon (critical for window management)
+start_service "sxhkd" "-c ~/.config/sxhkd/sxhkdrc" "Hotkey daemon"
+
+# Wait for core services
+sleep 1
+
+# Wallpaper setup with enhanced error handling
+log "Setting up wallpaper..."
+wallpaper_set=false
+
+if [ -f "$HOME/Pictures/WallPapers/fail.png" ]; then
+    if command -v nitrogen >/dev/null 2>&1; then
+        log "Setting wallpaper with nitrogen"
+        nitrogen --set-scaled "$HOME/Pictures/WallPapers/fail.png" &
+        wallpaper_set=true
+    elif command -v feh >/dev/null 2>&1; then
+        log "Setting wallpaper with feh (fallback)"
+        feh --bg-scale "$HOME/Pictures/WallPapers/fail.png" &
+        wallpaper_set=true
+    fi
 fi
 
-# Input setup
+if [ "$wallpaper_set" = false ]; then
+    log "Setting solid black background (fallback)"
+    xsetroot -solid "#000000" &
+fi
+
+# Input and display setup
+log "Configuring input devices..."
 xsetroot -cursor_name left_ptr &
-setxkbmap -option caps:escape_shifted_capslock &
-xinput --set-prop "$(xinput list --name-only | grep -i touchpad)" "libinput Natural Scrolling Enabled" 1 2>/dev/null || true
-xinput --set-prop "$(xinput list --name-only | grep -i touchpad)" "libinput Tapping Enabled" 1 2>/dev/null || true
 
-# Optional services
-command -v mpris-proxy >/dev/null 2>&1 && mpris-proxy &
-command -v dunst >/dev/null 2>&1 && dunst &
-command -v libinput-gestures >/dev/null 2>&1 && libinput-gestures &
-
-# Start EWW bar
-if [ -f ~/.config/eww/start.sh ]; then
-  (bash ~/.config/eww/start.sh &) || true
+# Keyboard setup with error handling
+if setxkbmap -option caps:escape_shifted_capslock 2>/dev/null; then
+    log "Caps lock configured as additional escape"
+else
+    log "Warning: Could not configure caps lock behavior"
 fi
+
+# Touchpad configuration with better error handling
+touchpad_device=$(xinput list --name-only | grep -i touchpad | head -n1)
+if [ -n "$touchpad_device" ]; then
+    log "Configuring touchpad: $touchpad_device"
+    xinput --set-prop "$touchpad_device" "libinput Natural Scrolling Enabled" 1 2>/dev/null && \
+        log "Natural scrolling enabled" || log "Warning: Could not enable natural scrolling"
+    xinput --set-prop "$touchpad_device" "libinput Tapping Enabled" 1 2>/dev/null && \
+        log "Tap to click enabled" || log "Warning: Could not enable tap to click"
+else
+    log "No touchpad detected"
+fi
+
+# Optional services (non-critical)
+log "Starting optional services..."
+
+start_service "mpris-proxy" "" "MPRIS proxy for media keys"
+start_service "dunst" "" "Notification daemon"
+start_service "libinput-gestures" "" "Gesture recognition"
+
+# Brief pause before starting UI components
+sleep 0.5
+
+# Start EWW bar with enhanced error handling
+if [ -f ~/.config/eww/start.sh ]; then
+    log "Starting EWW bar..."
+    if bash ~/.config/eww/start.sh 2>/dev/null; then
+        log "EWW bar started successfully"
+    else
+        log "Warning: EWW bar failed to start"
+    fi
+else
+    log "Warning: EWW start script not found"
+fi
+
+# Brief pause for EWW to initialize
+sleep 1
+
+# BSPWM workspace and window management configuration
+log "Configuring BSPWM settings..."
 
 # Create workspaces
 bspc monitor -d 1 2 3 4 5 6 7 8 9 10
@@ -37,7 +129,7 @@ bspc monitor -d 1 2 3 4 5 6 7 8 9 10
 # Window settings
 bspc config border_width         1
 bspc config window_gap           0
-bspc config top_padding          18
+bspc config top_padding          10
 bspc config bottom_padding       0
 bspc config left_padding         0
 bspc config right_padding        0
@@ -77,22 +169,129 @@ bspc config urgent_border_color    "#ff6565"
 
 
 
-# App rules
+# Application workspace assignments
+log "Setting up application rules..."
+
+# Development workspace (1)
 bspc rule -a Code desktop='^1' follow=on
+bspc rule -a code desktop='^1' follow=on
+bspc rule -a VSCodium desktop='^1' follow=on
+bspc rule -a jetbrains-idea desktop='^1' follow=on
+bspc rule -a jetbrains-pycharm desktop='^1' follow=on
+
+# Browser workspace (2)
 bspc rule -a Brave-browser desktop='^2' follow=on
+bspc rule -a brave-browser desktop='^2' follow=on
 bspc rule -a firefox desktop='^2' follow=on
+bspc rule -a Firefox desktop='^2' follow=on
+bspc rule -a chromium desktop='^2' follow=on
+bspc rule -a Chromium desktop='^2' follow=on
+bspc rule -a Google-chrome desktop='^2' follow=on
+
+# Communication workspace (3)
 bspc rule -a discord desktop='^3' follow=on
 bspc rule -a Discord desktop='^3' follow=on
+bspc rule -a slack desktop='^3' follow=on
+bspc rule -a Slack desktop='^3' follow=on
+bspc rule -a telegram-desktop desktop='^3' follow=on
+bspc rule -a TelegramDesktop desktop='^3' follow=on
+bspc rule -a Signal desktop='^3' follow=on
+
+# Media workspace (4)
 bspc rule -a vlc desktop='^4' follow=on
+bspc rule -a VLC desktop='^4' follow=on
+bspc rule -a mpv desktop='^4' follow=on
+bspc rule -a Spotify desktop='^4' follow=on
+bspc rule -a spotify desktop='^4' follow=on
+
+# Terminal applications (stay tiled)
 bspc rule -a kitty state=tiled
-bspc rule -a Pavucontrol state=floating center=true
-bspc rule -a Lxappearance state=floating center=true
-bspc rule -a Arandr state=floating center=true
-bspc rule -a Nitrogen state=floating center=true
-bspc rule -a nautilus state=floating center=true
+bspc rule -a Alacritty state=tiled
+bspc rule -a st state=tiled
+bspc rule -a URxvt state=tiled
+bspc rule -a xterm state=tiled
+
+# Floating applications with smart sizing
+bspc rule -a Pavucontrol state=floating center=true rectangle=400x300+0+0
+bspc rule -a Lxappearance state=floating center=true rectangle=600x400+0+0
+bspc rule -a Arandr state=floating center=true rectangle=800x600+0+0
+bspc rule -a Nitrogen state=floating center=true rectangle=800x600+0+0
+bspc rule -a nautilus state=floating center=true rectangle=900x600+0+0
+bspc rule -a Nautilus state=floating center=true rectangle=900x600+0+0
+bspc rule -a thunar state=floating center=true rectangle=900x600+0+0
+bspc rule -a Thunar state=floating center=true rectangle=900x600+0+0
+
+# System utilities (floating)
+bspc rule -a Gnome-calculator state=floating center=true
+bspc rule -a Calculator state=floating center=true
+bspc rule -a Gnome-system-monitor state=floating center=true rectangle=800x600+0+0
+bspc rule -a System-monitor state=floating center=true rectangle=800x600+0+0
+bspc rule -a htop state=floating center=true rectangle=1000x700+0+0
+bspc rule -a Htop state=floating center=true rectangle=1000x700+0+0
+
+# Image viewers and editors
+bspc rule -a feh state=floating center=true
+bspc rule -a Sxiv state=floating center=true
+bspc rule -a Gimp state=floating
+bspc rule -a Inkscape state=floating
+
+# Archive managers
+bspc rule -a File-roller state=floating center=true rectangle=600x400+0+0
+bspc rule -a Engrampa state=floating center=true rectangle=600x400+0+0
+
+# Password managers
+bspc rule -a Bitwarden state=floating center=true rectangle=800x600+0+0
+bspc rule -a KeePassXC state=floating center=true rectangle=800x600+0+0
+
+# VM and remote desktop
+bspc rule -a VirtualBox state=floating
+bspc rule -a Virt-manager state=floating
+bspc rule -a Remmina state=floating center=true rectangle=1000x700+0+0
+
+# Bar and system overlays (unmanaged)
 bspc rule -a Polybar manage=off
+bspc rule -a eww-bar manage=off layer=above
+bspc rule -a eww layer=above
+bspc rule -a Plank manage=off
+
+# Popup and context menus
 bspc rule -a \*:POPUP state=floating center=true
 bspc rule -a \*:popup state=floating center=true
+bspc rule -a \*:dialog state=floating center=true
+bspc rule -a \*:Dialog state=floating center=true
+bspc rule -a \*:Toolkit state=floating
 
-# Reload EWW after startup
-(sleep 1 && command -v eww >/dev/null 2>&1 && eww reload 2>/dev/null) &
+# Special application behaviors
+bspc rule -a Zathura state=tiled  # PDF viewer stays tiled
+bspc rule -a Steam state=floating
+bspc rule -a steam state=floating
+
+log "Application rules configured"
+
+# Post-startup optimizations and cleanup
+log "Performing post-startup optimizations..."
+
+# Reload EWW after everything is initialized (non-blocking)
+(
+    sleep 2
+    if command -v eww >/dev/null 2>&1; then
+        log "Reloading EWW for final setup..."
+        eww reload 2>/dev/null && log "EWW reloaded successfully" || log "EWW reload failed"
+    fi
+) &
+
+# Final status report
+log "BSPWM configuration completed successfully"
+log "Workspaces: $(bspc query -D --names | tr '\n' ' ')"
+log "Active services: $(pgrep -x 'picom|sxhkd|dunst|libinput-gestures|eww' | wc -l) running"
+
+# Optional: Clean up any orphaned processes from previous sessions
+(
+    sleep 3
+    # Clean up duplicate picom processes (keep only the newest)
+    pids=$(pgrep picom)
+    if [ $(echo "$pids" | wc -l) -gt 1 ]; then
+        echo "$pids" | head -n -1 | xargs kill 2>/dev/null
+        log "Cleaned up duplicate picom processes"
+    fi
+) &

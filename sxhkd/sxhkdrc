@@ -71,24 +71,6 @@ super + s
 super + shift + s
 	bspc node -g private
 
-# Bulk window state management
-# Make all windows in current workspace floating
-super + ctrl + shift + f
-	~/.config/bspwm/scripts/bulk_window_state.sh floating
-
-# Make all windows in current workspace tiled
-super + ctrl + shift + t
-	~/.config/bspwm/scripts/bulk_window_state.sh tiled
-
-# Make all windows in specific workspace floating (1-9)
-super + ctrl + alt + {1,2,3,4,5,6,7,8,9}
-	~/.config/bspwm/scripts/bulk_window_state.sh floating {1,2,3,4,5,6,7,8,9}
-
-# Make all windows in specific workspace tiled (1-9)
-super + alt + shift + {1,2,3,4,5,6,7,8,9}
-	~/.config/bspwm/scripts/bulk_window_state.sh tiled {1,2,3,4,5,6,7,8,9}
-
-
 # Restart bspwm and sxhkd
 super + shift + r
 	bspc wm -r && pkill -USR1 -x sxhkd && notify-send "BSPWM" "Configuration reloaded"
@@ -106,7 +88,7 @@ super + m
 	bspc desktop -l next
 
 # Swap with biggest window
-super + g
+super + b
 	bspc node -s biggest.window.local
 
 # Balance tree
@@ -114,7 +96,7 @@ super + shift + b
 	bspc node @/ -B
 
 # Equalize tree 
-super + shift + equal
+super + ctrl + e
 	bspc node @/ -E
 
 
@@ -195,34 +177,26 @@ super + ctrl + {h,j,k,l}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
 # Alternative mouse support using keyboard shortcuts
-# Super+M then drag with mouse to move
-super + m ; button1
+# Super+Shift+D then drag with mouse to move
+super + shift + d ; button1
 	bspc node -v
 
 # Super+R then drag with mouse to resize  
 super + r ; button1
 	bspc node -z
 
-# Quick mouse-like movement with number pad
-super + shift + {1,2,3,4,6,7,8,9}
-	bspc node -v {-40 40,0 40,40 40,-40 0,40 0,-40 -40,0 -40,40 -40}
-
-# Quick resize with Ctrl+number pad
-super + ctrl + {1,2,3,4,6,7,8,9}
-	~/.config/bspwm/scripts/resize.sh {left,down,right,up,right,up,up,left}
-
 
 # Increase/decrease window gaps
-super + {plus,minus}
+super + shift + {plus,minus}
 	bspc config -d focused window_gap $(($(bspc config -d focused window_gap) {+,-} 5))
 
-# Reset window gaps
+# Reset window gaps to default
 super + equal
 	bspc config -d focused window_gap 12
 
 # Toggle gaps
 super + shift + g
-	bspc config window_gap {0,12}
+	if [ "$(bspc config window_gap)" -eq 0 ]; then bspc config window_gap 12; else bspc config window_gap 0; fi
 
 
 # Volume control
@@ -271,12 +245,12 @@ shift + XF86MonBrightnessDown
 
 
 # Lock screen
-super + l
-	if command -v i3lock >/dev/null; then i3lock -c 0d1117; fi
+super + x
+	i3lock -c 0d1117
 
 # Toggle compositor
 super + shift + c
-	if pgrep -x picom > /dev/null; then pkill picom; else picom -b; fi
+	pgrep -x picom > /dev/null && pkill picom || picom -b
 
 # Restart EWW bar
 super + shift + w
@@ -300,7 +274,7 @@ super + ctrl + alt + {h,j,k,l}
 	bspc node -p {west,south,north,east}
 
 # Preselect ratio
-super + ctrl + {1-9}
+super + ctrl + alt + {1-9}
 	bspc node -o 0.{1-9}
 
 # Cancel preselection for focused node
