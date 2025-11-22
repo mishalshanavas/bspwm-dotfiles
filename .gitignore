@@ -1,0 +1,10 @@
+*
+
+!.gitignore
+!README.md
+
+!niri/
+!niri/**
+!fastfetch/
+!fastfetch/**
+
