@@ -7,4 +7,5 @@
 !niri/**
 !fastfetch/
 !fastfetch/**
-
+!waybar/
+!waybar/** 

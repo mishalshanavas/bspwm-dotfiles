@@ -1,0 +1,60 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 24,
+    "spacing": 0,
+    
+    "modules-left": ["niri/workspaces", "niri/window"],
+    "modules-center": ["clock"],
+    "modules-right": ["pulseaudio", "custom/sep", "network", "custom/sep", "battery"],
+
+    "niri/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "active": "●",
+            "default": "○"
+        }
+    },
+
+    "niri/window": {
+        "format": "{title}",
+        "max-length": 50,
+        "rewrite": {
+            "(.*) — Mozilla Firefox": "firefox: $1",
+            "(.*) - Brave": "brave: $1",
+            "(.*) - Visual Studio Code": "code: $1",
+            "~": "kitty"
+        }
+    },
+
+    "clock": {
+        "format": "{:%I:%M %p}",
+        "tooltip-format": "{:%A, %B %d, %Y}"
+    },
+
+    "battery": {
+        "interval": 2,
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "bat {capacity}%",
+        "format-charging": "chr {capacity}%"
+    },
+
+    "network": {
+        "format-wifi": "wfi {signalStrength}%",
+        "format-ethernet": "eth",
+        "format-disconnected": "wfi ✕"
+    },
+
+    "pulseaudio": {
+        "format": "vol {volume}%",
+        "format-muted": "vol ✕"
+    },
+
+    "custom/sep": {
+        "format": "|",
+        "tooltip": false
+    }
+}
