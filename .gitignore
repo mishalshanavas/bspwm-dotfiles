@@ -9,3 +9,6 @@
 !fastfetch/**
 !waybar/
 !waybar/** 
+!fuzzel/
+!fuzzel/**
+
