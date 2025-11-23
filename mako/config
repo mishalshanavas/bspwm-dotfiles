@@ -1,0 +1,36 @@
+# Mako minimal monochrome theme
+
+# Appearance
+font=monospace 10
+background-color=#1a1a1a
+text-color=#e0e0e0
+border-color=#404040
+border-size=1
+border-radius=0
+
+# Layout
+width=300
+height=100
+margin=10
+padding=10
+
+# Behavior
+default-timeout=5000
+ignore-timeout=0
+
+# Format and actions
+format=<b>%s</b>\n%b
+
+# Urgency levels
+[urgency=low]
+border-color=#303030
+background-color=#1a1a1a
+
+[urgency=normal]
+border-color=#404040
+background-color=#1a1a1a
+
+[urgency=high]
+border-color=#808080
+background-color=#262626
+text-color=#ffffff

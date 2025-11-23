@@ -11,4 +11,5 @@
 !waybar/** 
 !fuzzel/
 !fuzzel/**
-
+!mako/
+!mako/**
