@@ -4,104 +4,118 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: monospace;
-    font-weight: bold;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: normal;
     min-height: 0;
+    margin: 0;
+    padding: 0;
 }
 
 window#waybar {
     background-color: #0a0a0a;
     color: #b0b0b0;
-    border-bottom: 1px solid #2a2a2a;
+    margin: 0;
+    padding: 0;
 }
 
 /* Workspaces */
 #workspaces,
 #workspaces.niri {
     margin: 0;
-    padding: 0 6px;
-    background-color: #0a0a0a;
+    padding: 0 4px;
+    background-color: transparent;
     font-size: 16px;
     font-weight: bold;
+    border-radius: 0;
 }
 
 #workspaces button,
 #workspaces.niri button {
     background: transparent;
     border: none;
+    box-shadow: none;
     padding: 0;
-    margin: 0 3px;
+    margin: 0 2px;
     min-width: 0;
-    transition: color 0.2s ease;
+    transition: all 0.15s ease;
 }
 
 /* Empty workspace */
 #workspaces button.empty,
 #workspaces.niri button.empty {
-    color: #3a3a3a;
+    color: #404040;
 }
 
 /* Occupied workspace */
 #workspaces button,
 #workspaces.niri button {
-    color: #7a7a7a;
+    color: #909090;
 }
 
 /* Active/Focused workspace */
 #workspaces button.active,
 #workspaces.niri button.active {
-    color: #e0e0e0;
+    color: #ffffff;
 }
 
 #workspaces button:hover,
 #workspaces.niri button:hover {
-    color: #b0b0b0;
+    color: #d0d0d0;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 /* Window title */
 #window,
 #window.niri {
-    color: #8a8a8a;
-    padding: 0 8px;
+    color: #707070;
+    padding: 0 6px;
     font-size: 11px;
+    font-style: italic;
+    font-weight: normal;
 }
 
 /* Clock */
 #clock {
-    color: #b0b0b0;
-    padding: 0 8px;
+    color: #c0c0c0;
+    padding: 0 6px;
     font-weight: bold;
     font-size: 11px;
+    background-color: transparent;
+    margin: 0;
 }
 
 /* Separator */
 #custom-sep {
-    color: #4a4a4a;
-    padding: 0;
+    color: #303030;
+    padding: 0 2px;
+    font-weight: normal;
 }
 
 /* Modules */
 #battery,
 #network,
 #pulseaudio {
-    color: #8a8a8a;
-    padding: 0 6px;
+    color: #909090;
+    padding: 0 4px;
     font-size: 11px;
+    font-weight: normal;
 }
 
 #battery.charging {
-    color: #b0b0b0;
+    color: #d0d0d0;
 }
 
 #battery.warning:not(.charging) {
-    color: #7a7a7a;
+    color: #909090;
 }
 
 #battery.critical:not(.charging) {
-    color: #5a5a5a;
+    color: #606060;
 }
 
 #network.disconnected,
 #pulseaudio.muted {
-    color: #5a5a5a;
+    color: #505050;
 }
