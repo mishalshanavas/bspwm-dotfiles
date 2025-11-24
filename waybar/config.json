@@ -2,15 +2,11 @@
     "layer": "top",
     "position": "top",
     "height": 24,
-    "spacing": 0,
-    "margin-top": 0,
-    "margin-bottom": 0,
-    "margin-left": 0,
-    "margin-right": 0,
+    "spacing": 4,
     
     "modules-left": ["niri/workspaces", "niri/window"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "custom/sep", "network", "custom/sep", "battery"],
+    "modules-right": ["pulseaudio", "network", "battery"],
 
     "niri/workspaces": {
         "format": "{icon}",
@@ -21,44 +17,50 @@
     },
 
     "niri/window": {
-        "format": "{title}",
+        "format": "{}",
         "max-length": 50,
         "rewrite": {
-            "(.*) — Mozilla Firefox": "firefox: $1",
-            "(.*) - Brave": "brave: $1",
-            "(.*) - Visual Studio Code": "code: $1",
-            "~": "kitty"
+            "(.*) — Mozilla Firefox": "ff: $1",
+            "(.*) - Brave": "br: $1",
+            "(.*) - Visual Studio Code": "vsc: $1",
+            "~": "term"
         }
     },
 
     "clock": {
-        "format": "{:%I:%M %p}",
-        "tooltip-format": "{:%A, %B %d, %Y}"
+        "format": "{:%I:%M %p}",//12hr
+        "format-alt": "{:%d-%m-%y}", //date ddmmyy
+        "tooltip-format": "<tt>{calendar}</tt>",
+        "calendar": {
+            "format": {
+            "today": "<span background='#5e81ac' foreground='#eceff4'><b>{}</b></span>"
+            }
+        }
     },
 
     "battery": {
-        "interval": 2,
+        "interval": 30,
         "states": {
             "warning": 30,
             "critical": 15
         },
-        "format": "bat {capacity}%",
-        "format-charging": "chr {capacity}%"
+        "format": "{icon} {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-icons": ["", "", "", "", ""]
     },
 
     "network": {
-        "format-wifi": "wfi {signalStrength}%",
-        "format-ethernet": "eth",
-        "format-disconnected": "wfi ✕"
+        "format-wifi": " {signalStrength}%",
+        "format-ethernet": "",
+        "format-disconnected": "",
+        "tooltip-format": "{essid}"
     },
 
     "pulseaudio": {
-        "format": "vol {volume}%",
-        "format-muted": "vol ✕"
-    },
-
-    "custom/sep": {
-        "format": "|",
-        "tooltip": false
+        "format": "{icon} {volume}%",
+        "format-muted": "",
+        "format-icons": {
+            "default": ["", "", ""]
+        }
     }
 }
