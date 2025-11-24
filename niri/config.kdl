@@ -130,6 +130,18 @@ window-rule {
     clip-to-geometry true
 }
 
+// VSCode fullscreen on launch
+window-rule {
+    match app-id=r#"^code.*$"#
+    open-fullscreen true
+}
+
+// Brave fullscreen on launch
+window-rule {
+    match app-id=r#"^brave.*$"#
+    open-fullscreen true
+}
+
 // Keybindings
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
