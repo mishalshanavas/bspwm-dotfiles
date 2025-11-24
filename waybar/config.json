@@ -1,8 +1,8 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 24,
-    "spacing": 4,
+    "height": 18,
+    "spacing": 2,
     
     "modules-left": ["niri/workspaces", "niri/window"],
     "modules-center": ["clock"],
@@ -45,22 +45,22 @@
             "critical": 15
         },
         "format": "{icon} {capacity}%",
-        "format-charging": " {capacity}%",
-        "format-icons": ["", "", "", "", ""]
+        "format-charging": "󰂄 {capacity}%",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
     },
 
     "network": {
-        "format-wifi": " {signalStrength}%",
-        "format-ethernet": "",
-        "format-disconnected": "",
+        "format-wifi": "󰖩 {signalStrength}%",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰖪",
         "tooltip-format": "{essid}"
     },
 
     "pulseaudio": {
         "format": "{icon} {volume}%",
-        "format-muted": "",
+        "format-muted": "󰖁",
         "format-icons": {
-            "default": ["", "", ""]
+            "default": ["󰕿", "󰖀", "󰕾"]
         }
     }
 }

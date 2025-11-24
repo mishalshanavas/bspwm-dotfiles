@@ -133,13 +133,13 @@ window-rule {
 // VSCode fullscreen on launch
 window-rule {
     match app-id=r#"^code.*$"#
-    open-fullscreen true
+    open-maximized true
 }
 
 // Brave fullscreen on launch
 window-rule {
     match app-id=r#"^brave.*$"#
-    open-fullscreen true
+    open-maximized true
 }
 
 // Keybindings
