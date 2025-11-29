@@ -55,7 +55,7 @@ layout {
     // Window border (disabled)
     border {
         off
-        width 2
+        width 1
         active-color "#ffc87f"
         inactive-color "#505050"
         urgent-color "#9b0000"
@@ -96,8 +96,6 @@ hotkey-overlay {
     skip-at-startup
 }
 
-// Disable client-side decorations
-prefer-no-csd
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 

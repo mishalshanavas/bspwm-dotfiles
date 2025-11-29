@@ -28,8 +28,8 @@
     },
 
     "clock": {
-        "format": "{:%I:%M %p}",//12hr
-        "format-alt": "{:%d-%m-%y}", //date ddmmyy
+        "format": "{:%I:%M %p}",
+        "format-alt": "{:%d-%m-%y}", 
         "tooltip-format": "<tt>{calendar}</tt>",
         "calendar": {
             "format": {
@@ -50,7 +50,7 @@
     },
 
     "network": {
-        "format-wifi": "󰖩 {signalStrength}%",
+        "format-wifi": "󰖩  {signalStrength}%",
         "format-ethernet": "󰈀",
         "format-disconnected": "󰖪",
         "tooltip-format": "{essid}"
