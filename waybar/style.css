@@ -104,16 +104,25 @@ window#waybar {
     font-weight: normal;
 }
 
-#battery.charging {
+#battery {
+    background-color: #1a1a1a;
     color: #d0d0d0;
+    padding: 0 6px;
+}
+
+#battery.charging {
+    background-color: #2a4a2a;
+    color: #ffffff;
 }
 
 #battery.warning:not(.charging) {
-    color: #909090;
+    background-color: #4a3a1a;
+    color: #ffffff;
 }
 
 #battery.critical:not(.charging) {
-    color: #606060;
+    background-color: #4a1a1a;
+    color: #ffffff;
 }
 
 #network.disconnected,

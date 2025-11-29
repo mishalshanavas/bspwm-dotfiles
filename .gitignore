@@ -15,3 +15,5 @@
 !mako/**
 !swaylock/
 !swaylock/**
+!kitty/
+!kitty/**

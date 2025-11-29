@@ -118,11 +118,11 @@ window-rule {
 }
 
 // Block password managers from screen capture (disabled)
-/-window-rule {
-    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
-    match app-id=r#"^org\.gnome\.World\.Secrets$"#
-    block-out-from "screen-capture"
-}
+//window-rule {
+//    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+//    match app-id=r#"^org\.gnome\.World\.Secrets$"#
+//    block-out-from "screen-capture"
+//}
 
 // Rounded corners for all windows
 window-rule {
