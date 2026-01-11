@@ -1,3 +1,4 @@
+prefer-no-csd true
 // Input configuration
 input {
     keyboard {
@@ -31,6 +32,7 @@ output "eDP-1" {
     transform "normal"
     position x=0 y=0
 }
+
 
 // Window layout settings
 layout {
@@ -80,7 +82,7 @@ layout {
 
 // Startup applications
 spawn-at-startup "waybar" "-c" "/home/mishal/.config/waybar/config.json" "-s" "/home/mishal/.config/waybar/style.css"
-spawn-at-startup "swaybg" "-i" "/home/mishal/.config/niri/Anime.jpg" "-m" "fill"
+spawn-at-startup "swaybg" "-i" "/home/mishal/.config/niri/wallhaven-5wy861.png" "-m" "fill"
 
 // Notification daemon
 spawn-at-startup "mako"
@@ -113,6 +115,12 @@ window-rule {
 window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
     open-floating true
+}
+
+// Minecraft fullscreen without decorations
+window-rule {
+    match title="Minecraft"
+    open-fullscreen true
 }
 
 // Block password managers from screen capture (disabled)
@@ -149,6 +157,7 @@ binds {
     Alt+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Alt+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
+    Mod+Return hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Mod+V hotkey-overlay-title="Clipboard History" { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
     Super+Mod+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "/home/mishal/.config/swaylock/lock.sh"; }
 
