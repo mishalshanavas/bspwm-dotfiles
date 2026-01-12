@@ -14,7 +14,8 @@ set_brightness() {
     local val=$1
     [[ $val -lt $MIN ]] && val=$MIN
     [[ $val -gt 100 ]] && val=100
-    brightnessctl set ${val}%
+    brightnessctl set ${val}% >/dev/null
+    pkill -RTMIN+8 waybar
 }
 
 show_menu() {

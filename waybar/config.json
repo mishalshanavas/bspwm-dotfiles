@@ -69,7 +69,8 @@
         "on-click": "~/.config/waybar/scripts/audio-menu.sh",
         "on-scroll-up": "~/.config/waybar/scripts/audio-menu.sh up",
         "on-scroll-down": "~/.config/waybar/scripts/audio-menu.sh down",
-        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "smooth-scrolling-threshold": 1
     },
 
     "custom/caffeine": {
@@ -82,10 +83,12 @@
     "custom/brightness": {
         "format": "󰃟 {}%",
         "exec": "brightnessctl -m | awk -F, '{print substr($4, 0, length($4)-1)}'",
+        "signal": 8,
         "interval": 2,
         "on-click": "~/.config/waybar/scripts/brightness-menu.sh",
         "on-scroll-up": "~/.config/waybar/scripts/brightness-menu.sh up",
-        "on-scroll-down": "~/.config/waybar/scripts/brightness-menu.sh down"
+        "on-scroll-down": "~/.config/waybar/scripts/brightness-menu.sh down",
+        "smooth-scrolling-threshold": 1
     },
 
     "custom/power": {
