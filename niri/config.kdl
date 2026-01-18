@@ -49,6 +49,7 @@ layout {
 
     // Window focus indicator
     focus-ring {
+        off
         width 1
         active-color "#dadadaff"
         inactive-color "#505050"
@@ -75,7 +76,7 @@ layout {
     struts {
         left 2
         right 2
-        top 2
+        top 0
         bottom 2
     }
 }
@@ -170,12 +171,6 @@ window-rule {
 //    block-out-from "screen-capture"
 //}
 
-// Rounded corners for all windows
-window-rule {
-    geometry-corner-radius 4
-    clip-to-geometry true
-}
-
 // VSCode fullscreen on launch
 window-rule {
     match app-id=r#"^code.*$"#
@@ -188,6 +183,16 @@ window-rule {
     open-maximized true
 }
 
+// Floating terminal
+window-rule {
+    match app-id="floating-terminal"
+    open-floating true
+    default-column-width { fixed 680; }
+    default-window-height { fixed 330; }
+    focus-ring { off; }
+    border { off; }
+}
+
 // Keybindings
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
@@ -195,6 +200,8 @@ binds {
     // Application launchers
     Alt+Return hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Alt+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
+    Alt+Shift+Return hotkey-overlay-title="Floating Terminal" { spawn "kitty" "--class" "floating-terminal"; }
+    Alt+Shift+T hotkey-overlay-title="Floating Terminal" { spawn "kitty" "--class" "floating-terminal"; }
     Mod+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Alt+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Mod+Return hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
@@ -325,8 +332,7 @@ binds {
     Ctrl+Alt+Down  { set-window-height "+10%"; }
 
     // Floating window toggle
-    Mod+Shift+V { toggle-window-floating; }
-    Mod+Ctrl+V { switch-focus-between-floating-and-tiling; }
+    Mod+T { toggle-window-floating; }
 
     Mod+W { toggle-column-tabbed-display; }
 
