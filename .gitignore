@@ -8,7 +8,7 @@
 !fastfetch/
 !fastfetch/**
 !waybar/
-!waybar/** 
+!waybar/**
 !fuzzel/
 !fuzzel/**
 !mako/
@@ -17,3 +17,5 @@
 !swaylock/**
 !kitty/
 !kitty/**
+!bongocat/
+!bongocat/**
