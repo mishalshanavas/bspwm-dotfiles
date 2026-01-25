@@ -4,6 +4,16 @@
 image=~/.cache/lockscreen-blur.png
 scaling=fill
 
+# Prevent multiple unlock attempts
+grace=2
+grace-no-mouse
+grace-no-touch
+
+# Disable indicator after timeout
+indicator-idle-visible
+indicator-radius=100
+indicator-thickness=10
+
 # Colors - monochrome theme
 color=000000
 inside-color=00000000

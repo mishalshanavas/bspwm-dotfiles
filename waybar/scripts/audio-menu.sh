@@ -28,16 +28,6 @@ show_menu() {
     for ((i=0; i<EMPTY; i++)); do BAR+="░"; done
     
     MENU=""
-    if [[ "$MUTED" == "yes" ]]; then
-        MENU+="󰖁 [$BAR] $VOL% (muted)\n"
-    else
-        MENU+="󰕾 [$BAR] $VOL%\n"
-    fi
-    MENU+="──────────────\n"
-    MENU+="󰝝 +10%\n"
-    MENU+="󰝞 -10%\n"
-    MENU+="󰖁 Mute\n"
-    MENU+="──────────────\n"
     
     # Output devices
     MENU+="󰓃 Output:\n"
@@ -73,9 +63,6 @@ show_menu() {
     [[ -z "$CHOSEN" ]] && exit 0
 
     case "$CHOSEN" in
-        *"+10%"*) wpctl set-volume @DEFAULT_AUDIO_SINK@ 10%+; show_menu ;;
-        *"-10%"*) wpctl set-volume @DEFAULT_AUDIO_SINK@ 10%-; show_menu ;;
-        *"Mute"*) wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; show_menu ;;
         *"○"*)
             name=$(echo "$CHOSEN" | sed 's/.*○ //')
             sink=$(pactl list sinks | grep -B1 "Description: $name" | grep "Name:" | awk '{print $2}')
@@ -88,7 +75,7 @@ show_menu() {
 }
 
 case "$1" in
-    up) wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ ;;
-    down) wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- ;;
+    up) swayosd-client --output-volume raise ;;
+    down) swayosd-client --output-volume lower ;;
     *) show_menu ;;
 esac

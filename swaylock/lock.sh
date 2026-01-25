@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # Lock screen with blurred screenshot
 
+# Prevent multiple instances
+if pgrep -x swaylock > /dev/null; then
+    exit 0
+fi
+
 # Create cache directory if it doesn't exist
 mkdir -p ~/.cache
 

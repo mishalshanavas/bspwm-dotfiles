@@ -66,40 +66,43 @@ layout {
 
     // Window shadow settings
     shadow {
-        softness 30
-        spread 5
-        offset x=0 y=5
-        color "#0007"
+        off
     }
 
     // Window padding/struts
     struts {
-        left 2
-        right 2
+        left 0
+        right 0
         top 0
-        bottom 2
+        bottom 0
     }
 }
 
 // Startup applications
-spawn-at-startup "waybar" "-c" "/home/mishal/.config/waybar/config.json" "-s" "/home/mishal/.config/waybar/style.css"
-spawn-at-startup "swaybg" "-i" "/home/mishal/.config/niri/wall.jpg" "-m" "fill"
+spawn-at-startup "waybar" "-c" "/home/mishal/.config/waybar/config.jsonc" "-s" "/home/mishal/.config/waybar/style.css"
+spawn-at-startup "swaybg" "-i" "/home/mishal/.config/niri/wallpapers/2.jpg" "-m" "fill"
 
 // Notification daemon
 spawn-at-startup "mako"
+
+// SwayOSD server for volume/brightness OSD
+spawn-at-startup "swayosd-server" "--style" "/home/mishal/.config/swayosd/style.css" "--top-margin" "0.85"
 
 // Clipboard manager
 spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
 spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
 
+// Auto-mount USB drives
+spawn-at-startup "udiskie" "--tray"
+
 // Battery low warning
 spawn-at-startup "batsignal" "-w" "20" "-c" "10" "-d" "5"
 
 // Idle and lock manager
-spawn-at-startup "swayidle" "-w" "timeout" "300" "/home/mishal/.config/swaylock/lock.sh" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors" "before-sleep" "/home/mishal/.config/swaylock/lock.sh"
+spawn-at-startup "swayidle" "-w" "timeout" "300" "/home/mishal/.config/swaylock/lock.sh" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors" "before-sleep" "pgrep swaylock || /home/mishal/.config/swaylock/lock.sh"
 
-// Virtual pet overlay
-spawn-at-startup "wpets-all" "--watch-config" "--config" "/home/mishal/.config/bongocat/bongocat.conf"
+// Virtual pet overlay (delayed to render above waybar)
+spawn-at-startup "sh" "-c" "sleep 3 && wpets-all --watch-config --config /home/mishal/.config/bongocat/bongocat.conf"
 
 hotkey-overlay {
     skip-at-startup
@@ -171,6 +174,12 @@ window-rule {
 //    block-out-from "screen-capture"
 //}
 
+// Force sharp corners on all windows
+window-rule {
+    geometry-corner-radius 0
+    clip-to-geometry true
+}
+
 // VSCode fullscreen on launch
 window-rule {
     match app-id=r#"^code.*$"#
@@ -210,18 +219,22 @@ binds {
 
     Super+Mod+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
-    // Media keys
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
-    XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
-    XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+    // Wallpaper cycling
+    Mod+B hotkey-overlay-title="Cycle Wallpaper" { spawn "/home/mishal/.config/niri/scripts/wallpaper-cycle.sh"; }
 
-    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+    // Media keys
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "swayosd-client" "--output-volume" "raise"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "swayosd-client" "--output-volume" "lower"; }
+    XF86AudioMute        allow-when-locked=true { spawn "swayosd-client" "--output-volume" "mute-toggle"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn "swayosd-client" "--input-volume" "mute-toggle"; }
+
+    XF86MonBrightnessUp allow-when-locked=true { spawn "swayosd-client" "--brightness" "raise"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "swayosd-client" "--brightness" "lower"; }
 
     Mod+O repeat=false { toggle-overview; }
 
     Alt+Q repeat=false { close-window; }
+    Mod+Shift+Q hotkey-overlay-title="Force Kill Window" { spawn-sh "xdotool getactivewindow windowkill || true"; }
 
     // Window focus navigation
     Mod+Left  { focus-column-left; }
@@ -242,7 +255,6 @@ binds {
     Mod+Shift+J     { move-window-down; }
     Mod+Shift+K     { move-window-up; }
     Mod+Shift+L     { move-column-right; }
-
 
     Mod+Home { focus-column-first; }
     Mod+End  { focus-column-last; }

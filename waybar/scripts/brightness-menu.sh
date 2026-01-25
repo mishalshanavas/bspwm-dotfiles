@@ -56,7 +56,7 @@ show_menu() {
 }
 
 case "$1" in
-    up) set_brightness $(($(get_brightness) + 5)) ;;
-    down) set_brightness $(($(get_brightness) - 5)) ;;
+    up) swayosd-client --brightness raise ;;
+    down) swayosd-client --brightness lower ;;
     *) show_menu ;;
 esac
