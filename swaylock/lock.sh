@@ -1,38 +1,71 @@
 #!/usr/bin/env bash
-# Lock screen with blurred screenshot
+# Lock screen script with blurred screenshot for niri/swaylock
+# Best practices: atomic operations, proper error handling, race condition prevention
 
-# Prevent multiple instances
-if pgrep -x swaylock > /dev/null; then
+set -euo pipefail
+
+LOCK_FILE="/tmp/swaylock-$UID.lock"
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}"
+BLUR_IMAGE="$CACHE_DIR/lockscreen-blur.png"
+
+# Cleanup function
+cleanup() {
+    rm -f "$LOCK_FILE" "/tmp/lockscreen-$$-*.png" 2>/dev/null || true
+}
+trap cleanup EXIT
+
+# Prevent multiple instances using flock
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
     exit 0
 fi
 
-# Create cache directory if it doesn't exist
-mkdir -p ~/.cache
+# Ensure cache directory exists
+mkdir -p "$CACHE_DIR"
 
-# Take screenshot using grim (more reliable than niri screenshot)
-screenshot_file="/tmp/lockscreen-$(date +%s).png"
-grim "$screenshot_file"
-
-# Check if grim succeeded and blur the screenshot
-if [ -f "$screenshot_file" ]; then
-    # Use ffmpeg for blur (faster than ImageMagick)
-    ffmpeg -i "$screenshot_file" -vf "gblur=sigma=20" -y ~/.cache/lockscreen-blur.png 2>/dev/null
+# Take screenshot and blur it
+take_and_blur_screenshot() {
+    local tmp_screenshot="/tmp/lockscreen-$$-$(date +%s%N).png"
     
-    # Fallback to ImageMagick if ffmpeg fails
-    if [ $? -ne 0 ] && command -v convert &> /dev/null; then
-        convert "$screenshot_file" -blur 0x8 ~/.cache/lockscreen-blur.png
+    # Try grim for screenshot (works with wlroots compositors including niri)
+    if command -v grim &>/dev/null && grim "$tmp_screenshot" 2>/dev/null; then
+        # Try ffmpeg for fast blur
+        if command -v ffmpeg &>/dev/null; then
+            if ffmpeg -loglevel error -i "$tmp_screenshot" -vf "gblur=sigma=30,brightness=-0.05" -y "$BLUR_IMAGE" 2>/dev/null; then
+                rm -f "$tmp_screenshot"
+                return 0
+            fi
+        fi
+        
+        # Fallback: ImageMagick convert
+        if command -v magick &>/dev/null; then
+            if magick "$tmp_screenshot" -blur 0x12 -modulate 95 "$BLUR_IMAGE" 2>/dev/null; then
+                rm -f "$tmp_screenshot"
+                return 0
+            fi
+        elif command -v convert &>/dev/null; then
+            if convert "$tmp_screenshot" -blur 0x12 -modulate 95 "$BLUR_IMAGE" 2>/dev/null; then
+                rm -f "$tmp_screenshot"
+                return 0
+            fi
+        fi
+        
+        rm -f "$tmp_screenshot"
     fi
     
-    rm "$screenshot_file"
-else
-    # Fallback: create solid color if screenshot fails
-    if command -v convert &> /dev/null; then
-        convert -size 1366x768 xc:#1a1a1a ~/.cache/lockscreen-blur.png
-    else
-        # If no tools available, swaylock will use solid color from config
-        :
-    fi
+    return 1
+}
+
+# Try to create blurred screenshot, fall back to solid color
+if ! take_and_blur_screenshot; then
+    # Remove stale image to let swaylock use solid color from config
+    rm -f "$BLUR_IMAGE" 2>/dev/null || true
 fi
 
 # Lock the screen
-swaylock
+# Note: swaylock reads config from ~/.config/swaylock/config
+if [[ -f "$BLUR_IMAGE" ]]; then
+    exec swaylock --image "$BLUR_IMAGE" --scaling fill
+else
+    exec swaylock
+fi
